@@ -96,7 +96,7 @@ router.post('/renombrar', async (req, res) => {
 
         await rename(ruta , nuevaRuta)
 
-        return res.status(200).redirect('/archivos?success= Se renombro con éxito el archivo');
+        return res.status(200).redirect('/archivos?success= El archivo llamado ' + archivo + ' se renombro a ' + nuevoNombre);
         
     } catch (error) {
         console.log(error);
