@@ -51,10 +51,10 @@
     <!-- Renombrar -->
     <div class="col-12 col-sm-3 contaienr p-5">
       <h3>Renombrar un archivo</h3>
-      <form action="/renombrar">
+      <form action="/archivos/renombrar" method="POST">
         <div class="form-group">
           Nombre del archivo
-          <input name="nombre" class="form-control" id="archivo" />
+          <input name="archivo" class="form-control" id="archivo" />
         </div>
         <div class="form-group">
           Nuevo nombre del archivo
@@ -67,7 +67,7 @@
     <!-- Eliminar -->
     <div class="col-12 col-sm-3 contaienr p-5">
       <h3>Eliminar un archivo</h3>
-      <form action="/eliminar">
+      <form action="/archivos/eliminar" method="POST">
         <div class="form-group">
           Nombre del archivo
           <input name="archivo" class="form-control" id="archivo" />
