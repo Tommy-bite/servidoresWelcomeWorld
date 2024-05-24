@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { writeFile } from 'fs/promises';
+import { writeFile, readFile } from 'fs/promises';
 import path from 'path'
 import slugify from 'slugify';
 
@@ -12,7 +12,6 @@ router.get('/', (req, res) => {
 
     // query params query string
     const { success, error } = req.query
-    console.log(success);
 
     return res.render('archivos' , {success, error});
 });
@@ -48,7 +47,6 @@ router.post('/crear', async (req, res) => {
 
 router.get('/leer', async (req, res) => {
     try {
-
         const { archivo } = req.query
 
         const slug = slugify(archivo, {
@@ -58,15 +56,17 @@ router.get('/leer', async (req, res) => {
         })
 
         const ruta = path.join(__dirname, `../data/archivos/${slug}.txt`);
+        const contenido = await readFile(ruta, 'utf-8')
 
-        await readFile(ruta, 'utf-8')
+        return res.redirect('/archivos?success=' + contenido);
         
     } catch (error) {
         console.log(error);
+        if(error.code === 'ENOENT'){
+            return res.status(404).redirect('/archivos?error=No se encuentra este archivo');
+        }
         return res.status(500).redirect('/archivos?error=error al leer el archivo');
     }
-
-
 });
 
 export default router;
