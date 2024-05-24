@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { writeFile, readFile, rename, unlink } from 'fs/promises';
+import moment from 'moment';
 import path from 'path'
 import slugify from 'slugify';
 
@@ -21,8 +22,13 @@ router.post('/crear', async (req, res) => {
 
     try {
 
+        const fechaActual = moment();
+        const fechaActualFormateada = fechaActual.format('DD-MM-YYYY')
+
         const nombreArchivo = req.body.archivo;
-        const contenidoArchivo = req.body.contenido;
+        let contenidoArchivo = req.body.contenido;
+
+        contenidoArchivo = fechaActualFormateada + ' - ' + contenidoArchivo ;
     
         if(!nombreArchivo || !contenidoArchivo || !nombreArchivo.trim() || !contenidoArchivo.trim()){
             console.log('Todos los campos obligatorios');
