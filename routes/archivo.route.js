@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { writeFile, readFile, rename } from 'fs/promises';
+import { writeFile, readFile, rename, unlink } from 'fs/promises';
 import path from 'path'
 import slugify from 'slugify';
 
@@ -91,6 +91,32 @@ router.post('/renombrar', async (req, res) => {
         await rename(ruta , nuevaRuta)
 
         return res.status(200).redirect('/archivos?success= Se renombro con éxito el archivo');
+        
+    } catch (error) {
+        console.log(error);
+        if(error.code === 'ENOENT'){
+            return res.status(404).redirect('/archivos?error=No se encuentra este archivo');
+        }
+        return res.status(500).redirect('/archivos?error=error al renombar el archivo');
+    }
+});
+
+
+router.post('/eliminar', async (req, res) => {
+    try {
+        const { archivo } = req.body
+
+        const slug = slugify(archivo, {
+            strict: true,
+            lower : true,
+            trim: true
+        })
+  
+        const ruta = path.join(__dirname, `../data/archivos/${slug}.txt`);
+
+        await unlink(ruta)
+
+        return res.status(200).redirect('/archivos?success= Se elimino con éxito el archivo');
         
     } catch (error) {
         console.log(error);
